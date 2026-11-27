@@ -401,7 +401,7 @@ section.on{animation:fadeUp .35s both}
 
 <div id="auth"><div class="acard"><div class="alogo">EMBER UP</div><p class="asub">Апгрейдер и кейсы · войди, чтобы играть</p>
 <div class="atabs"><button class="chip on" data-m="in">Вход</button><button class="chip" data-m="up">Регистрация</button></div>
-<label>Логин<input id="al" class="inp" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="латиница, цифры, _"></label>
+<label>Логин<input id="al" class="inp" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="буквы, цифры, _ (можно по-русски)"></label>
 <label>Пароль<input id="ap" class="inp" type="password" autocomplete="current-password" placeholder="не короче 6 символов"></label>
 <label id="ap2w" class="hid">Повтори пароль<input id="ap2" class="inp" type="password" autocomplete="new-password"></label>
 <div id="aerr" class="aerr"></div><button class="go" id="ago">ВОЙТИ</button>
@@ -863,6 +863,20 @@ S.rf=S.rf||{};{const t=(S.rf.mn||0)+(S.rf.cr||0);S.rf={};if(t>0){S.bal+=t;setTim
 const keepScroll=(f,id)=>function(){const e=$(id),x=e.scrollLeft,y=e.scrollTop;f();e.scrollLeft=x;e.scrollTop=y};
 rInvUp=keepScroll(rInvUp,"inv-up");rTg=keepScroll(rTg,"tg");rInv=keepScroll(rInv,"inv");rCt=keepScroll(rCt,"ctg");
 $("rc").onclick=e=>{const b=e.target.closest("[data-c]");if(!b||busy)return;const v=+b.dataset.c;coins=v?Math.min(S.bal,coins+v):0;fixTgt();rStage();rTg()};
+// ===== ЛОГИН: русские буквы, фильтр запрещённых слов, защита от двойников =====
+const BW_CK={а:"a",в:"b",е:"e",к:"k",м:"m",н:"h",о:"o",р:"p",с:"c",т:"t",у:"y",х:"x"},ckey=s=>s.toLowerCase().replace(/ё/g,"е").replace(/[а-я]/g,c=>BW_CK[c]||c);
+const BW_NC={a:"а",b:"в",c:"с",e:"е",h:"н",k:"к",m:"м",o:"о",p:"р",t:"т",x:"х",y:"у",0:"о",3:"з",4:"ч"},BW_NL={а:"a",в:"b",е:"e",к:"k",м:"m",н:"h",о:"o",р:"p",с:"c",т:"t",у:"y",х:"x",0:"o",1:"i",3:"e",4:"a",5:"s",7:"t"};
+const bwC=s=>s.replace(/(.)\1+/g,"$1");
+const BW_SUB=["хуй","хуе","хуя","хую","хуи","пизд","ебан","ебат","ебал","ебуч","ебла","ебну","ебис","блят","бляд","сука","суки","сучк","сучар","мудак","мудил","мудо","пидор","пидар","пидр","педик","гандон","гондон","залуп","шлюх","шалав","долбоеб","долбаеб","говн","жоп","срак","дроч","мраз","ублюд","гнид","выеб","заеб","наеб","уеб","нахер","похер","захер","нигер","нигг","чурк","сосат","отсос","дебил","идиот","кретин","гитлер","фашист","нацист",
+"fuck","fck","shit","bitch","cunt","dick","pussy","whore","slut","nigg","fagg","retard","asshole","bastard","wank","twat","porn","hitler","rapist","huy","hui","huj","huev","hueb","pizd","ebat","ebal","eban","eblan","ebuch","blya","blyat","blyad","suka","sucka","mudak","mudil","pidor","pidar","pidr","gandon","gondon","zalup","shlyux","shlyuh","dolboeb","dolbaeb","gavno","govno","zhopa","jopa","drochi","ublyud","gnid","naeb","zaeb","vyeb","nahuy","pohuy","pohui","nahui","nahuj","naher","poher","debil","idiot"].map(bwC);
+const BW_EQ=["бля","жид","хач","чмо","nazi","kike","spic","chink","anal","rape","cock","sex","ass","лох"].map(bwC);
+function badName(n){
+  const base=n.toLowerCase().replace(/ё/g,"е").replace(/_/g,""),vs=new Set();
+  for(const s of [base,base.replace(/[a-z0-9]/g,c=>BW_NC[c]||c),base.replace(/[а-я0-9]/g,c=>BW_NL[c]||c)]){vs.add(bwC(s));vs.add(bwC(s.replace(/[0-9]/g,"")))}
+  for(const v of vs)if(BW_SUB.some(w=>v.includes(w)))return true;
+  for(const t of n.toLowerCase().replace(/ё/g,"е").split(/[_0-9]+/).filter(Boolean)){
+    for(const s of [t,t.replace(/[a-z]/g,c=>BW_NC[c]||c),t.replace(/[а-я]/g,c=>BW_NL[c]||c)])if(BW_EQ.includes(bwC(s)))return true}
+  return false}
 // ===== АККАУНТЫ =====
 const AK="emberAcc2",enc=new TextEncoder();let amode="in",fails=0,lockUntil=0;
 const accs=()=>{try{return JSON.parse(localStorage.getItem(AK))||{}}catch(e){return{}}};
@@ -872,44 +886,47 @@ const TAB=sessionStorage.getItem("emberTab")||(sessionStorage.setItem("emberTab"
 const lockOk=l=>{const v=localStorage.getItem("emberLock:"+l);if(!v)return true;const p=v.split(":");return p[0]===TAB||Date.now()-(+p[1])>5000};
 function loadFor(l){const r=localStorage.getItem(LKEY(l));if(!r)return null;const i=r.lastIndexOf("|"),j=r.slice(0,i);if(h53(j+SECRET+l)!==r.slice(i+1))return"bad";try{return sanitize(JSON.parse(j))}catch(e){return"bad"}}
 function bounce(msg){if(ACC){save();try{localStorage.removeItem("emberLock:"+ACC)}catch(e){}}ACC=null;sessionStorage.removeItem("emberSess");if(msg)sessionStorage.setItem("emberMsg",msg);location.reload()}
-function enter(l,st){
-  ACC=l;S=st;S.nick=l;S.pid=S.pid||uid()+uid();
+function enter(l,nm,st){
+  ACC=l;S=st;S.nick=nm;S.pid=S.pid||uid()+uid();
   const t=((S.rf&&S.rf.mn)||0)+((S.rf&&S.rf.cr)||0);S.rf={};if(t>0)setTimeout(()=>toast("Незавершённая игра: ставка "+fmt(t)+" ◈ потеряна"),700);
   if(!DB&&S.pend){S.bal+=S.pend.cost;S.pend=null;S.rm=null}rm=null;
   sessionStorage.setItem("emberSess",l);localStorage.setItem("emberLock:"+l,TAB+":"+Date.now());
-  $("auth").style.display="none";$("acn").textContent=l;all();
+  $("auth").style.display="none";$("acn").textContent=nm;all();
 }
 document.querySelectorAll("#auth [data-m]").forEach(b=>b.onclick=()=>{amode=b.dataset.m;document.querySelectorAll("#auth [data-m]").forEach(x=>x.classList.toggle("on",x===b));$("ap2w").classList.toggle("hid",amode==="in");$("ago").textContent=amode==="in"?"ВОЙТИ":"СОЗДАТЬ АККАУНТ";$("aerr").textContent=""});
 $("ago").onclick=async()=>{
-  const err=m=>{$("aerr").textContent=m},l=$("al").value.trim().toLowerCase(),pw=$("ap").value;
+  const err=m=>{$("aerr").textContent=m},nm=$("al").value.trim().toLowerCase().replace(/ё/g,"е"),l=ckey(nm),pw=$("ap").value;
   if(Date.now()<lockUntil){err("Слишком много попыток. Подожди "+Math.ceil((lockUntil-Date.now())/1e3)+" с");return}
-  if(!/^[a-z0-9_]{3,16}$/.test(l)){err("Логин: 3–16 символов, латиница, цифры и _");return}
+  if(!/^[a-zа-я0-9_]{3,16}$/.test(nm)){err("Логин: 3–16 символов — русские или латинские буквы, цифры и _");return}
+  if(!/[a-zа-я]/.test(nm)){err("В логине нужна хотя бы одна буква");return}
+  if(amode==="up"&&badName(nm)){err("Этот логин нельзя: в нём запрещённые слова");return}
   if(pw.length<6){err("Пароль не короче 6 символов");return}
   if(amode==="up"&&pw!==$("ap2").value){err("Пароли не совпадают");return}
   if(!(window.crypto&&crypto.subtle)){err("Нужен https или современный браузер");return}
   $("ago").disabled=true;err("");
   try{
     const A=accs();let rec=A[l];
-    if(DB){try{const r=await net("GET","users/"+l);if(r&&r.h)rec=r}catch(e){err("Нет связи с базой. Попробуй позже");return}}
+    if(DB){try{const r=await net("GET","users/"+encodeURIComponent(l));if(r&&r.h)rec=r}catch(e){err("Нет связи с базой. Попробуй позже");return}}
     if(amode==="up"){
       if(rec){err("Такой логин уже занят");return}
       const s=uid()+uid(),h=await hp(pw,s);
-      if(DB){try{await net("PUT","users/"+l,{s,h,t:Date.now()})}catch(e){err("Логин занят или нет связи");return}}
-      const first=!Object.keys(A).length;A[l]={s,h};localStorage.setItem(AK,JSON.stringify(A));
-      enter(l,first?(LEG&&Array.isArray(LEG.inv)?sanitize(LEG):S):fresh());
+      if(DB){try{await net("PUT","users/"+encodeURIComponent(l),{s,h,t:Date.now(),n:nm})}catch(e){err("Логин занят или нет связи");return}}
+      const first=!Object.keys(A).length;A[l]={s,h,n:nm};localStorage.setItem(AK,JSON.stringify(A));
+      enter(l,nm,first?(LEG&&Array.isArray(LEG.inv)?sanitize(LEG):S):fresh());
     }else{
       if(!rec||(await hp(pw,rec.s))!==rec.h){fails++;if(fails>=5){lockUntil=Date.now()+15000;fails=0}err("Неверный логин или пароль");return}
+      if(badName(rec.n||nm)){err("Этот логин запрещён");return}
       if(!lockOk(l)){err("Аккаунт открыт в другой вкладке");return}
-      fails=0;if(!A[l]){A[l]={s:rec.s,h:rec.h};localStorage.setItem(AK,JSON.stringify(A))}
+      fails=0;if(!A[l]){A[l]={s:rec.s,h:rec.h,n:rec.n||nm};localStorage.setItem(AK,JSON.stringify(A))}
       let st=loadFor(l);if(st==="bad"){setTimeout(()=>toast("Сохранение повреждено, прогресс сброшен"),600);st=null}
-      enter(l,st||fresh());
+      enter(l,rec.n||nm,st||fresh());
     }
   }finally{$("ago").disabled=false}
 };
 $("lo").onclick=()=>bounce();
 setInterval(()=>{if(!ACC)return;if(!lockOk(ACC)){bounce("Аккаунт открыт в другой вкладке");return}localStorage.setItem("emberLock:"+ACC,TAB+":"+Date.now())},2000);
 {const m=sessionStorage.getItem("emberMsg");sessionStorage.removeItem("emberMsg");const l=sessionStorage.getItem("emberSess");
- if(l&&accs()[l]&&lockOk(l)){let st=loadFor(l);if(st==="bad")st=null;enter(l,st||fresh())}else if(m)$("aerr").textContent=m}
+ if(l&&accs()[l]&&lockOk(l)){let st=loadFor(l);if(st==="bad")st=null;enter(l,accs()[l].n||l,st||fresh())}else if(m)$("aerr").textContent=m}
 
 rQty();all();
 })();
