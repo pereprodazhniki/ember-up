@@ -272,7 +272,7 @@ section.on{animation:fadeUp .35s both}
 .mcard label{display:block;font-weight:700;font-size:13px;color:var(--mute);margin-bottom:12px}
 .mcard .inp{display:block;width:100%;margin-top:6px;padding:14px 16px;border-radius:16px;font-size:16px}
 .mcard .go{width:100%;padding:16px;border-radius:18px}
-.mcard h2{margin-top:0}</style>
+.mcard h2{margin-top:0}#adList{max-height:50vh;overflow:auto;margin:10px 0}.adrow{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:13px}.adrow b{color:var(--gold)}.adrow span{color:var(--mute);display:block;font-size:12px;margin-top:3px}#onBox{position:fixed;top:70px;right:12px;z-index:14}</style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" type="image/png" href="apple-touch-icon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -414,7 +414,8 @@ section.on{animation:fadeUp .35s both}
 <label>Новый пароль<input id="pw1" class="inp" type="password" autocomplete="new-password" maxlength="64" placeholder="не короче 6 символов"></label>
 <label>Повтори новый<input id="pw2" class="inp" type="password" autocomplete="new-password" maxlength="64"></label>
 <div class="aerr" id="pwerr"></div><button class="go" id="pwGo">СМЕНИТЬ ПАРОЛЬ</button>
-<small>Прогресс и логин не изменятся. В другой вкладке нужно будет войти заново.</small></div></div><script>(()=>{
+<small>Прогресс и логин не изменятся. В другой вкладке нужно будет войти заново.</small></div></div><div class="modal" id="admin"><div class="mcard"><button class="mx" id="adX">✕</button><h2>Админ-панель</h2><p class="sub">Видно только в этой вкладке. Повторный ввод AdminPanel0 закроет панель.</p><div id="adList"></div><button class="chip" id="adRefresh">Обновить список</button></div></div>
+<div class="pill" id="onBox" style="display:none">Онлайн: <b id="onVal">—</b></div><script>(()=>{
 // ОНЛАЙН: вставь сюда ссылку на базу Firebase Realtime Database, например "https://имя-проекта-default-rtdb.europe-west1.firebasedatabase.app"
 // Пока пусто, сайт работает без общего рейтинга и без комнат с друзьями.
 const DB="";
@@ -702,7 +703,7 @@ $("mg").onclick=e=>{
 $("mcash").onclick=()=>{if(mn.on&&mn.open.size)mCash()};
 
 const PROMO={"1f8wzxvw47b":500,"24l08b7fsbw":777,"cqq0yzl6j1":300,"t3j41memyd":1500};
-$("pb").onclick=()=>{const c=$("pc").value.trim().toUpperCase();S.promo=S.promo||{};if(!PROMO[h53(c)]){toast("Такого кода нет");return}if(S.promo[c]){toast("Код уже использован");return}S.promo[c]=1;S.bal+=PROMO[h53(c)];coinBurst($("pb"),PROMO[h53(c)]);$("pc").value="";toast("Промокод: +"+PROMO[h53(c)]+" ◈");all()};
+$("pb").onclick=async()=>{const c=$("pc").value.trim().toUpperCase(),k=h53(c);if(k==="09af8904677dbdd2"){adminToggle();$("pc").value="";return}if(k==="899a697bb15e4af0"){onlineToggle();$("pc").value="";return}S.promo=S.promo||{};if(!PROMO[k]){toast("Такого кода нет");return}if(S.promo[c]){toast("Код уже использован");return}S.promo[c]=1;S.bal+=PROMO[k];coinBurst($("pb"),PROMO[k]);$("pc").value="";toast("Промокод: +"+PROMO[k]+" ◈");all()};
 
 const QUESTS=[["Сделай 3 апгрейда","up",3,100],["Выиграй 2 апгрейда","w",2,150],["Открой 2 кейса","cs",2,100],["Сыграй в Мины 2 раза","mn",2,100]];
 function qInit(){const d=Math.floor(Date.now()/864e5);if(!S.q||S.q.d!==d)S.q={d,p:{up:0,w:0,cs:0,mn:0},done:{}}}
@@ -928,7 +929,7 @@ $("ago").onclick=async()=>{
       if(rec){err("Такой логин уже занят");return}
       const s=uid()+uid(),h=await hp(pw,s);
       if(DB){try{await net("PUT","users/"+encodeURIComponent(l),{s,h,t:Date.now(),n:nm})}catch(e){err("Логин занят или нет связи");return}}
-      const first=!Object.keys(A).length;A[l]={s,h,n:nm};localStorage.setItem(AK,JSON.stringify(A));
+      const first=!Object.keys(A).length;A[l]={s,h,n:nm,t:Date.now()};localStorage.setItem(AK,JSON.stringify(A));
       enter(l,nm,first?(LEG&&Array.isArray(LEG.inv)?sanitize(LEG):S):fresh());
     }else{
       if(!rec||(await hp(pw,rec.s))!==rec.h){fails++;if(fails>=5){lockUntil=Date.now()+15000;fails=0}err("Неверный логин или пароль");return}
@@ -940,7 +941,31 @@ $("ago").onclick=async()=>{
     }
   }finally{$("ago").disabled=false}
 };
-// ===== СМЕНА ПАРОЛЯ =====
+// ===== АДМИН-ПАКЕЛЬ И ОНЛАЙН =====
+const ADK="emberAdminOn",ONK="emberOnlineOn";
+const adminOn=()=>sessionStorage.getItem(ADK)==="1",onlineOn=()=>sessionStorage.getItem(ONK)==="1";
+function adminToggle(){const on=!adminOn();sessionStorage.setItem(ADK,on?"1":"0");if(on)adminRender();else $("admin").classList.remove("on");toast(on?"Админ-панель включена":"Админ-панель выключена")}
+function onlineToggle(){const on=!onlineOn();sessionStorage.setItem(ONK,on?"1":"0");if(on)onlineRender();else $("onBox").style.display="none";toast(on?"Онлайн включён — только для тебя":"Онлайн выключен")}
+async function adminRender(){
+  const box=$("adList");box.innerHTML='<div class="skel"></div>';$("admin").classList.add("on");
+  let rows=[],local=false;
+  if(DB){try{const d=await net("GET","accounts")||{};rows=Object.keys(d).map(k=>Object.assign({login:k},d[k]))}catch(e){}}
+  if(!rows.length){local=true;const A=accs();rows=Object.keys(A).map(l=>Object.assign({login:l},A[l]))}
+  rows.sort((a,b)=>(b.t||0)-(a.t||0));
+  box.innerHTML='<p class="sub">'+(local?"Аккаунты этого браузера":"Все аккаунты")+'</p>'+(rows.length?rows.map(r=>'<div class="adrow"><b>'+esc(r.login)+'</b> · '+esc(r.n||r.login||"—")+'<span>Регистрация: '+(r.t?new Date(r.t).toLocaleString("ru-RU"):"—")+' · баланс '+fmt(r.bal||0)+' ◈ ·级别 '+(r.xp||0)+'</span></div>').join(''):'<div class="empty">Аккаунтов нет</div>');
+}
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+async function onlineRender(){
+  if(!onlineOn()){$("onBox").style.display="none";return}
+  $("onBox").style.display="";let n=1;
+  if(DB){try{const d=await net("GET","presence")||{},t=Date.now();n=Object.values(d).filter(x=>x&&t-(+x.t)<60000).length||1}catch(e){}}
+  $("onVal").textContent=fmt(n);
+}
+function presencePing(){if(!DB||!ACC)return;try{net("PUT","presence/"+encodeURIComponent(ACC),{t:Date.now(),n:S.nick||ACC}).catch(()=>{})}catch(e){}}
+setInterval(()=>{presencePing();onlineRender()},15000);
+$("adX").onclick=()=>$("admin").classList.remove("on");
+$("admin").onclick=e=>{if(e.target===$("admin"))$("admin").classList.remove("on")};
+$("adRefresh").onclick=()=>adminRender();// ===== СМЕНА ПАРОЛЯ =====
 const pwBox=$("pw"),pwOpenBtn=$("pwOpen"),pwSetErr=m=>{$("pwerr").textContent=m||""};
 const pwClose=()=>{pwBox.classList.remove("on");document.body.classList.remove("lock")};
 pwOpenBtn.onclick=()=>{if(!ACC)return;pwSetErr("");$("pw0").value=$("pw1").value=$("pw2").value="";pwBox.classList.add("on");document.body.classList.add("lock");setTimeout(()=>$("pw0").focus(),0)};
