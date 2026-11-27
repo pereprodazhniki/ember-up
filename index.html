@@ -952,7 +952,7 @@ async function adminRender(){
   if(DB){try{const d=await net("GET","accounts")||{};rows=Object.keys(d).map(k=>Object.assign({login:k},d[k]))}catch(e){}}
   if(!rows.length){local=true;const A=accs();rows=Object.keys(A).map(l=>Object.assign({login:l},A[l]))}
   rows.sort((a,b)=>(b.t||0)-(a.t||0));
-  box.innerHTML='<p class="sub">'+(local?"Аккаунты этого браузера":"Все аккаунты")+'</p>'+(rows.length?rows.map(r=>'<div class="adrow"><b>'+esc(r.login)+'</b> · '+esc(r.n||r.login||"—")+'<span>Регистрация: '+(r.t?new Date(r.t).toLocaleString("ru-RU"):"—")+' · баланс '+fmt(r.bal||0)+' ◈ ·级别 '+(r.xp||0)+'</span></div>').join(''):'<div class="empty">Аккаунтов нет</div>');
+  box.innerHTML='<p class="sub">'+(local?"Аккаунты этого браузера":"Все аккаунты")+'</p>'+(rows.length?rows.map(r=>'<div class="adrow"><b>'+esc(r.login)+'</b> · '+esc(r.n||r.login||"—")+'<span>Регистрация: '+(r.t?new Date(r.t).toLocaleString("ru-RU"):"—")+' · баланс '+fmt(r.bal||0)+' ◈ · Уровень '+(r.xp||0)+'</span></div>').join(''):'<div class="empty">Аккаунтов нет</div>');
 }
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 async function onlineRender(){
