@@ -229,6 +229,46 @@ h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute
 .card .ic,.it .ic,.drop .ic{line-height:0;margin-bottom:6px}
 .bd svg{width:88%;height:88%;display:block;position:relative;z-index:1;filter:drop-shadow(0 2px 3px #0006)}
 @media(max-width:780px){#g-mines .sub{display:none}#g-mines .ctl{gap:6px}#g-mines .go{flex:1 1 0;min-width:0;padding:11px 8px!important;font-size:12px!important}#g-mines .pill{font-size:12px;padding:7px 10px}#mbet .chip,#gtabs .chip{padding:7px 12px;font-size:13px}#g-mines .mg{gap:6px;max-width:300px;margin:0 auto}}
+/* ===== multi-open + polish ===== */
+#res{scroll-margin-top:128px}.resbar{margin-bottom:6px}
+.drops{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))!important;gap:8px!important}.drops .drop{padding:8px 4px!important;font-size:12px}.drops .drop .bd{width:46px;height:46px;border-radius:15px}
+@media(min-width:700px){.drops{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important}}
+.qty{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px}.qty .ql{font-weight:700;color:var(--mute);margin-right:4px;font-size:13px}
+.qty .chip{min-width:46px;padding:7px 10px;text-align:center}
+#views.g2{display:grid;grid-template-columns:1fr;gap:0 8px}
+.view.mv{height:92px;margin-bottom:8px;border-radius:16px}
+.mv .it{flex:0 0 76px;height:76px;padding:6px 2px 0;font-size:9.5px;border-radius:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mv .it .bd{width:38px;height:38px;border-radius:13px}
+.it{transition:transform .35s,opacity .35s,box-shadow .35s}
+.view.done .it:not(.win){opacity:.35}
+.it.win{transform:scale(1.1);opacity:1;box-shadow:0 0 26px var(--rc),inset 0 0 18px #ffffff18;position:relative;z-index:1}
+.drops{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:8px 0 12px}
+.drops .drop{flex-direction:column;gap:4px;padding:12px 8px;text-align:center;animation:dropIn .5s both;animation-delay:calc(var(--i,0)*70ms)}
+.tot{margin:6px 0 12px;font-weight:700}.tot b{color:var(--gold)}.tot .up{color:#5be37a}.tot .dn{color:#ff6a7a}
+@keyframes dropIn{from{opacity:0;transform:translateY(14px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+section.on{animation:fadeUp .35s both}
+.case{position:relative;overflow:hidden;isolation:isolate;transition:transform .2s,border-color .2s,box-shadow .2s}
+.case::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(120% 70% at 50% 0,var(--rc,#ff3d57),transparent 70%);opacity:.22;pointer-events:none}
+.case::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,#ffffff1c,transparent);transform:skewX(-18deg);transition:left .6s;pointer-events:none}
+.case:hover{transform:translateY(-5px);border-color:var(--rc,#ff3d57);box-shadow:0 16px 34px #0008,0 0 24px var(--rc,#ff3d57)}.case:hover::after{left:130%}
+.case .ic{filter:drop-shadow(0 6px 12px #0008);transition:transform .25s}.case:hover .ic{transform:scale(1.12) rotate(-4deg)}
+.case .p{background:linear-gradient(90deg,#ff3d57,#ff8a3d);box-shadow:0 6px 16px #ff3d5755}
+.chip{transition:background .15s,border-color .15s,transform .12s}.chip.on{background:linear-gradient(135deg,#ff3d5744,#ff8a3d33);box-shadow:0 0 14px #ff3d5744}
+.go:not(:disabled){box-shadow:0 8px 30px #ff3d5766,inset 0 1px 0 #fff4}
+@media(min-width:700px){#views.g2{grid-template-columns:1fr 1fr}}
+@media(max-width:780px){.qty .ql{flex:0 0 100%}.qty .chip{flex:1 0 17%;min-height:38px;padding:8px 0}}
+/* ===== вход / регистрация + общий лоск ===== */
+#auth{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:20px;overflow:auto;background:radial-gradient(800px 500px at 15% 0,#ff3d5733,transparent 60%),radial-gradient(700px 500px at 95% 100%,#a45bff33,transparent 60%),#07060d}
+.acard{width:min(400px,100%);padding:28px 24px;border-radius:32px;background:linear-gradient(180deg,#1b1330,#130e1d);border:1px solid #3a2a5c;box-shadow:0 30px 80px #000a,inset 0 1px 0 #ffffff14;animation:fadeUp .5s both}
+.alogo{font:800 32px Unbounded,sans-serif;text-align:center;background:linear-gradient(90deg,#ff3d57,#ffc861,#ff3d8a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.asub{text-align:center;color:var(--mute);margin:6px 0 18px}
+.atabs{display:flex;gap:6px;margin-bottom:14px}.atabs .chip{flex:1;padding:11px;text-align:center}
+.acard label{display:block;font-weight:700;font-size:13px;color:var(--mute);margin-bottom:12px}.acard label.hid{display:none}
+.acard .inp{display:block;width:100%;margin-top:6px;padding:14px 16px;border-radius:16px;font-size:16px}
+.aerr{min-height:20px;color:#ff6a7a;font-weight:700;font-size:13px;margin-bottom:8px;text-align:center}
+.acard .go{width:100%;padding:16px;border-radius:18px}.acard small{display:block;margin-top:12px;color:var(--mute);text-align:center;font-size:12px}
+.case,.stat,.ach div,.rrow,.drop{border-radius:24px}.view{border-radius:24px}.inp{border-radius:16px}.toast{box-shadow:0 12px 30px #000a}
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" type="image/png" href="apple-touch-icon.png">
@@ -278,7 +318,8 @@ h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute
 <section id="t-cs">
   <h1>Кейсы</h1>
   <p class="sub">Открой кейс и получи случайный предмет из его диапазона. Выпавший предмет сразу идёт в инвентарь.</p>
-  <div id="cview" style="display:none"><div class="view" id="view"><div class="strip" id="strip"></div></div><div class="res" id="res"></div></div>
+  <div id="cview" style="display:none"><div id="views"></div><div class="res" id="res"></div></div>
+  <div class="qty" id="cq"></div>
   <div class="ctl" id="cf" style="justify-content:flex-start;margin-bottom:12px"></div>
   <div class="cases" id="cases"></div>
 </section>
@@ -345,7 +386,7 @@ h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute
   <p class="sub">Бонус раз в сутки, статистика и последние события. Промокоды ищи сам: один из них спрятан лучше остальных.</p>
   <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><button class="chip" id="wup"></button></div>
   <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><input class="inp" id="pc" placeholder="Промокод" maxlength="16"><button class="chip" id="pb">Активировать</button></div>
-  <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><input class="inp" id="nk" placeholder="Твой ник для рейтинга и друзей" maxlength="16"><button class="chip" id="nkb">Сохранить ник</button></div>
+  <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><span class="pill">Аккаунт: <b id="acn">—</b></span><button class="chip" id="lo">Выйти из аккаунта</button></div>
   <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><button class="go" id="bon" style="font-size:13px;padding:13px 28px"></button><button class="chip" id="rst">Сбросить прогресс</button></div>
   <div class="stats" id="stats"></div>
   <h2>Задания дня</h2><div class="ach" id="qs"></div>
@@ -358,7 +399,14 @@ h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute
 <div class="ov" id="ov"><div class="big" id="ovi"></div><h3 id="ovt"></h3><div class="sub" id="ovs"></div><button class="go" id="ovb" style="font-size:13px;padding:13px 32px">ЗАБРАТЬ</button></div>
 <div class="toast" id="toast"></div>
 
-<script>
+<div id="auth"><div class="acard"><div class="alogo">EMBER UP</div><p class="asub">Апгрейдер и кейсы · войди, чтобы играть</p>
+<div class="atabs"><button class="chip on" data-m="in">Вход</button><button class="chip" data-m="up">Регистрация</button></div>
+<label>Логин<input id="al" class="inp" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="латиница, цифры, _"></label>
+<label>Пароль<input id="ap" class="inp" type="password" autocomplete="current-password" placeholder="не короче 6 символов"></label>
+<label id="ap2w" class="hid">Повтори пароль<input id="ap2" class="inp" type="password" autocomplete="new-password"></label>
+<div id="aerr" class="aerr"></div><button class="go" id="ago">ВОЙТИ</button>
+<small>Логин уникален. Пароль восстановить нельзя, запомни его.</small></div></div>
+<script>(()=>{
 // ОНЛАЙН: вставь сюда ссылку на базу Firebase Realtime Database, например "https://имя-проекта-default-rtdb.europe-west1.firebasedatabase.app"
 // Пока пусто, сайт работает без общего рейтинга и без комнат с друзьями.
 const DB="";
@@ -415,11 +463,12 @@ function sanitize(x){
   x.rf=x.rf&&typeof x.rf==="object"?{mn:Math.max(0,num(x.rf.mn)),cr:Math.max(0,num(x.rf.cr))}:{};
   if(!(x.pend&&typeof x.pend.code==="string"&&num(x.pend.cost)>0)){x.pend=null;x.rm=null}
   return x}
-let S=null;try{S=JSON.parse(localStorage.getItem("emberUp4"))}catch(e){}
+const h53=(s,sd=0)=>{let a=0xdeadbeef^sd,b=0x41c6ce57^sd;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
+const SECRET="eu~k7q#9z",LKEY=l=>"emberUp4:"+l;let ACC=null,LEG=null,S=null;try{LEG=JSON.parse(localStorage.getItem("emberUp4"))}catch(e){}
 function fresh(){return{wt:Date.now(),wl:0,bal:1000,inv:[0,3,6].map(i=>({u:uid(),i})),xp:0,st:{up:0,w:0,l:0,cs:0,best:0,ct:0},streak:0,ach:{},snd:true,h:[],bon:0,eco:(navigator.hardwareConcurrency||4)<=4}}
 if(!S||!S.inv){let o=null,pp=OLD3P;try{o=JSON.parse(localStorage.getItem("emberUp3"))}catch(e){}if(!o||!Array.isArray(o.inv)){pp=OLDP;try{o=JSON.parse(localStorage.getItem("emberUp2"))}catch(e){}}S=o&&Array.isArray(o.inv)?migrate(o,pp):fresh()}
 S=sanitize(S);S.wt=S.wt||Date.now();S.wl=S.wl||0;S.streak=S.streak||0;S.ach=S.ach||{};S.snd=S.snd!==false;S.st.ct=S.st.ct||0;
-const save=()=>{try{localStorage.setItem("emberUp4",JSON.stringify(S))}catch(e){}};
+const save=()=>{if(!ACC)return;try{const j=JSON.stringify(S);localStorage.setItem(LKEY(ACC),j+"|"+h53(j+SECRET+ACC))}catch(e){}};
 let ac=null,mg=null;
 function A(){if(!S.snd)return null;try{if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();mg=ac.createGain();mg.gain.value=.55;mg.connect(ac.destination)}if(ac.state==="suspended")ac.resume();return ac}catch(e){return null}}
 function tone(f,d=.12,t="sine",v=.06,at=0,glide){const c=A();if(!c)return;try{const o=c.createOscillator(),g=c.createGain(),t0=c.currentTime+at;o.type=t;o.frequency.setValueAtTime(f,t0);if(glide)o.frequency.exponentialRampToValueAtTime(glide,t0+d);g.gain.setValueAtTime(.0001,t0);g.gain.linearRampToValueAtTime(v,t0+.008);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(mg);o.start(t0);o.stop(t0+d+.02)}catch(e){}}
@@ -492,7 +541,7 @@ let cf="all";
 function rCases(){
   const tags=[["all","Все"],["mix","Микс"],["rare","Rare"],["sr","Super Rare"],["epic","Epic"],["mythic","Mythic"],["legend","Legendary"],["ultra","Ultra"]];
   $("cf").innerHTML=tags.map(t=>`<button class="chip ${cf===t[0]?"on":""}" data-f="${t[0]}">${t[1]}</button>`).join("");
-  $("cases").innerHTML=CASES.map((c,k)=>[c,k]).filter(([c])=>cf==="all"||(c[6]||"mix")===cf).map(([c,k])=>c[5]&&!S.st.sec?`<button class="case" disabled style="opacity:.5"><div class="ic">🔒</div><b>Секретный кейс</b><small>Откроется после 5 побед подряд в апгрейдере</small></button>`:`<button class="case" data-k="${k}" style="--rc:${RC[rar(c[1])]}"><div class="ic">${c[2]}</div><b>${c[0]}</b><small>${c[7]?(Date.now()-(S.dc||0)<864e5?"Будет через "+Math.ceil((864e5-(Date.now()-S.dc))/36e5)+" ч":"Раз в сутки"):"от "+fmt(c[3])+" до "+fmt(c[4])+" ◈"}</small><span class="p">${c[1]?fmt(c[1])+" ◈":"БЕСПЛАТНО"}</span></button>`).join("")}
+  $("cases").innerHTML=CASES.map((c,k)=>[c,k]).filter(([c])=>cf==="all"||(c[6]||"mix")===cf).map(([c,k])=>c[5]&&!S.st.sec?`<button class="case" disabled style="opacity:.5"><div class="ic">🔒</div><b>Секретный кейс</b><small>Откроется после 5 побед подряд в апгрейдере</small></button>`:`<button class="case" data-k="${k}" style="--rc:${RC[rar(c[1])]}"><div class="ic">${c[2]}</div><b>${c[0]}</b><small>${c[7]?(Date.now()-(S.dc||0)<864e5?"Будет через "+Math.ceil((864e5-(Date.now()-S.dc))/36e5)+" ч":"Раз в сутки"):"от "+fmt(c[3])+" до "+fmt(c[4])+" ◈"}</small><span class="p">${c[1]?fmt(c[1]*(c[7]?1:qty))+" ◈":"БЕСПЛАТНО"}</span></button>`).join("")}
 function rProf(){
   const s=S.st;{const wl=S.wl||0;$("wup").textContent=wl>=10?"Кошелёк: максимальный уровень":"👛 Улучшить кошелёк до ур. "+(wl+1)+" за "+fmt(300*(wl+1)*(wl+1))+" ◈ (скорость "+(6+3*wl)+" → "+(9+3*wl)+" ◈ в минуту)"}
   $("stats").innerHTML=[["Апгрейдов",s.up],["Побед",s.w],["Поражений",s.l],["Открыто кейсов",s.cs],["Лучший предмет",fmt(s.best)+" ◈"],["Шанс побед",s.up?Math.round(s.w/s.up*100)+"%":"—"]].map(a=>`<div class="stat"><b>${a[1]}</b><span>${a[0]}</span></div>`).join("");
@@ -544,23 +593,40 @@ let cb=false,lastDrop=null;
 $("cases").onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;openCase(+b.dataset.k)};
 function poolOf(c){return ITEMS.map((t,i)=>i).filter(i=>P(i)>=c[3]&&P(i)<=c[4]&&(!c[6]||ITEMS[i][3]===c[6]))}
 function roll(c){const pool=poolOf(c);let sm=0;const w=pool.map(i=>{const v=1/Math.pow(P(i),.9);sm+=v;return v});let r=Math.random()*sm;for(let j=0;j<pool.length;j++){r-=w[j];if(r<=0)return pool[j]}return pool[0]}
+let qty=1;
+function rQty(){$("cq").innerHTML='<span class="ql">Открыть сразу:</span>'+[1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="chip ${qty===n?"on":""}" data-q="${n}">×${n}</button>`).join("")}
+$("cq").onclick=e=>{const b=e.target.closest("[data-q]");if(!b||cb)return;qty=+b.dataset.q;rQty();rCases()};
 function openCase(k){
-  if(cb||busy)return;const c=CASES[k];if(c[5]&&!S.st.sec)return;if(S.bal<c[1]){toast("Не хватает монет");return}if(c[7]&&Date.now()-(S.dc||0)<864e5){toast("Бесплатный кейс будет через "+Math.ceil((864e5-(Date.now()-S.dc))/36e5)+" ч");return}
-  cb=true;hold=true;S.bal-=c[1];if(c[7])S.dc=Date.now();
-  const pl=poolOf(c),tz=pl[pl.length-1-Math.floor(Math.random()*Math.min(3,pl.length))];let near=null;
-  const arr=Array.from({length:50},()=>roll(c)),win=arr[42],u=uid();if(P(win)<P(tz)*.35){arr[Math.random()<.5?43:41]=tz;near=tz}
-  S.inv.push({u,i:win});S.st.cs++;qAdd("cs");S.st.best=Math.max(S.st.best,P(win));addXp(15);log("Из кейса «"+c[0]+"»: "+ITEMS[win][0]);save();rHead();
-  $("cview").style.display="block";$("res").textContent="Открываем…";
-  const st=$("strip");st.innerHTML=arr.map(i=>`<div class="it" style="--rc:${col(i)}"><div class="ic">${bdg(i)}</div>${ITEMS[i][0]}</div>`).join("");
-  st.style.transition="none";st.style.transform="translateX(0)";void st.offsetWidth;
-  const off=42*114+55-$("view").clientWidth/2+(Math.random()*60-30),dur=S.eco?1.8:5;
-  st.style.transition=`transform ${dur}s cubic-bezier(.1,.65,.1,1)`;st.style.transform=`translateX(${-off}px)`;sfx.whoosh();tickSeq(dur,34);
+  if(cb||busy)return;const c=CASES[k];if(c[5]&&!S.st.sec)return;
+  const n=c[7]?1:qty,tot=c[1]*n;
+  if(S.bal<tot){toast("Не хватает монет: нужно "+fmt(tot)+" ◈");return}
+  if(c[7]&&Date.now()-(S.dc||0)<864e5){toast("Бесплатный кейс будет через "+Math.ceil((864e5-(Date.now()-S.dc))/36e5)+" ч");return}
+  cb=true;hold=true;S.bal-=tot;if(c[7])S.dc=Date.now();
+  const pl=poolOf(c),tz=pl[pl.length-1-Math.floor(Math.random()*Math.min(3,pl.length))],big=n>1,W=big?76:110,drops=[],rows=[];
+  for(let j=0;j<n;j++){
+    const arr=Array.from({length:50},()=>roll(c)),win=arr[42];let near=null;
+    if(P(win)<P(tz)*.35){arr[Math.random()<.5?43:41]=tz;near=tz}
+    const u=uid();S.inv.push({u,i:win});drops.push({u,i:win,near});rows.push(arr);qAdd("cs");
+  }
+  S.st.cs+=n;S.st.best=Math.max(S.st.best,...drops.map(d=>P(d.i)));addXp(15*n);
+  log(("Из кейса «"+c[0]+"»"+(big?" ×"+n:"")+": "+drops.map(d=>ITEMS[d.i][0]).join(", ")).slice(0,150));save();rHead();
+  const vw=$("views"),dur=S.eco?1.8:4.6,gap=.28;
+  vw.className=n>=4?"g2":"";
+  vw.innerHTML=rows.map(arr=>`<div class="view${big?" mv":""}"><div class="strip">${arr.map(i=>`<div class="it" style="--rc:${col(i)}"><div class="ic">${bdg(i)}</div>${ITEMS[i][0]}</div>`).join("")}</div></div>`).join("");
+  $("cview").style.display="block";$("res").innerHTML="";void vw.offsetWidth;
+  [...vw.children].forEach((v,j)=>{const st=v.firstChild,d=dur+j*gap,off=42*(W+4)+W/2-v.clientWidth/2+(Math.random()*W*.5-W*.25);
+    st.style.transition=`transform ${d}s cubic-bezier(.12,.62,.08,1)`;st.style.transform=`translateX(${-off}px)`;
+    setTimeout(()=>{st.children[42].classList.add("win");v.classList.add("done");sfx.tick(.9)},d*1000+100)});
+  sfx.whoosh();tickSeq(dur,34);
   setTimeout(()=>{
-    $("res").innerHTML=`<div class="drop" style="--rc:${col(win)}"><span class="ic">${bdg(win)}</span><b>${ITEMS[win][0]}</b><em>${fmt(P(win))} ◈</em></div>${near!=null?`<small class="near">Рядом проехал ${ITEMS[near][0]}!</small>`:""}<br><button class="chip" id="rs">Продать</button>`;
-    $("rs").onclick=()=>{const q=S.inv.findIndex(x=>x.u===u);if(q>=0){S.bal+=P(S.inv[q].i);S.inv.splice(q,1);sel.delete(u);sel2.delete(u);ctSel.delete(u);fixTgt();$("res").textContent="Продано.";sfx.cash();all()}};
-    if(P(win)>=c[1]*3){sfx.rare();celebrate(win,"Редкий дроп!")}else if(P(win)>=c[1])sfx.win();else sfx.tick(.7);
+    const tw=drops.reduce((a,d)=>a+P(d.i),0),bi=drops.reduce((a,d)=>P(d.i)>P(a.i)?d:a);
+    const tail=`${big?`<div class="tot">Выпало на <b>${fmt(tw)} ◈</b> · цена ${fmt(tot)} ◈ · <span class="${tw>=tot?"up":"dn"}">${tw>=tot?"+":"−"}${fmt(Math.abs(tw-tot))} ◈</span></div>`:drops[0].near!=null?`<small class="near">Рядом проехал ${ITEMS[drops[0].near][0]}!</small>`:""}<button class="chip" id="rs">Продать ${big?"всё":""} за ${fmt(tw)} ◈</button>`;
+    $("res").innerHTML=`<div class="resbar">${tail}</div><div class="drops">${drops.map((d,x)=>`<div class="drop" style="--rc:${col(d.i)};--i:${x}"><span class="ic">${bdg(d.i)}</span><b>${ITEMS[d.i][0]}</b><em>${fmt(P(d.i))} ◈</em></div>`).join("")}</div>`;
+    $("rs").onclick=()=>{let g=0;drops.forEach(d=>{const q=S.inv.findIndex(x=>x.u===d.u);if(q>=0){g+=P(S.inv[q].i);S.inv.splice(q,1);sel.delete(d.u);sel2.delete(d.u);ctSel.delete(d.u)}});if(g){S.bal+=g;fixTgt();$("res").textContent="Продано на "+fmt(g)+" ◈.";sfx.cash();all()}};
+    if(big)$("res").scrollIntoView({behavior:S.eco?"auto":"smooth",block:"start"});
+    if(P(bi.i)>=c[1]*3){sfx.rare();celebrate(bi.i,"Редкий дроп!")}else if(tw>=tot)sfx.win();else sfx.tick(.7);
     cb=false;flushToast();all();
-  },dur*1000+200);
+  },(dur+(n-1)*gap)*1000+450);
 }
 
 $("inv").onclick=e=>{const c=e.target.closest("[data-u]");if(!c)return;const u=c.dataset.u;sel2.has(u)?sel2.delete(u):sel2.add(u);rInv()};
@@ -570,7 +636,7 @@ $("sAll").onclick=()=>sell(()=>true);
 $("sLow").onclick=()=>sell(x=>P(x.i)<100);
 $("sPick").onclick=()=>{S.inv.forEach(x=>sel2.add(x.u));rInv()};
 $("bon").onclick=()=>{if(Date.now()-S.bon>=864e5){S.bon=Date.now();S.bal+=300;coinBurst($("bon"),300);toast("Бонус +300 ◈");all()}else toast("Бонус ещё не готов")};
-let rsT=0;$("rst").onclick=()=>{if(!rsT){$("rst").textContent="Точно сбросить? Нажми ещё раз";rsT=setTimeout(()=>{rsT=0;$("rst").textContent="Сбросить прогресс"},3500);return}clearTimeout(rsT);rsT=0;$("rst").textContent="Сбросить прогресс";const e=S.eco,pi=S.pid,nk=S.nick;S=fresh();S.eco=e;S.pid=pi;S.nick=nk;rm=null;rshow=false;clearInterval(rpoll);sel.clear();sel2.clear();ctSel.clear();tgt=null;coins=0;mn={on:false,bet:0,mines:new Set(),open:new Set(),end:false};all()};
+let rsT=0;$("rst").onclick=()=>{if(!rsT){$("rst").textContent="Точно сбросить? Нажми ещё раз";rsT=setTimeout(()=>{rsT=0;$("rst").textContent="Сбросить прогресс"},3500);return}clearTimeout(rsT);rsT=0;$("rst").textContent="Сбросить прогресс";const e=S.eco,pi=S.pid,nk=S.nick,pr=S.promo||{},bn=S.bon||0,dc=S.dc||0;S=fresh();S.eco=e;S.pid=pi;S.nick=nk;S.promo=pr;S.bon=bn;S.dc=dc;rm=null;rshow=false;clearInterval(rpoll);sel.clear();sel2.clear();ctSel.clear();tgt=null;coins=0;mn={on:false,bet:0,mines:new Set(),open:new Set(),end:false};all()};
 
 function celebrate(i,t){
   $("ovi").innerHTML=bdg(i,"xl");$("ovt").textContent=t;$("ovs").textContent=ITEMS[i][0]+" · "+fmt(P(i))+" ◈";
@@ -627,8 +693,8 @@ $("mg").onclick=e=>{
 };
 $("mcash").onclick=()=>{if(mn.on&&mn.open.size)mCash()};
 
-const PROMO={EMBER:500,FIRE777:777,HELLO:300,ABYSS:1500};
-$("pb").onclick=()=>{const c=$("pc").value.trim().toUpperCase();S.promo=S.promo||{};if(!PROMO[c]){toast("Такого кода нет");return}if(S.promo[c]){toast("Код уже использован");return}S.promo[c]=1;S.bal+=PROMO[c];coinBurst($("pb"),PROMO[c]);$("pc").value="";toast("Промокод: +"+PROMO[c]+" ◈");all()};
+const PROMO={"1f8wzxvw47b":500,"24l08b7fsbw":777,"cqq0yzl6j1":300,"t3j41memyd":1500};
+$("pb").onclick=()=>{const c=$("pc").value.trim().toUpperCase();S.promo=S.promo||{};if(!PROMO[h53(c)]){toast("Такого кода нет");return}if(S.promo[c]){toast("Код уже использован");return}S.promo[c]=1;S.bal+=PROMO[h53(c)];coinBurst($("pb"),PROMO[h53(c)]);$("pc").value="";toast("Промокод: +"+PROMO[h53(c)]+" ◈");all()};
 
 const QUESTS=[["Сделай 3 апгрейда","up",3,100],["Выиграй 2 апгрейда","w",2,150],["Открой 2 кейса","cs",2,100],["Сыграй в Мины 2 раза","mn",2,100]];
 function qInit(){const d=Math.floor(Date.now()/864e5);if(!S.q||S.q.d!==d)S.q={d,p:{up:0,w:0,cs:0,mn:0},done:{}}}
@@ -690,9 +756,9 @@ let lbRows=[],lbMode="v",lastPush=0;
 async function lbPush(force){if(!DB||!S.nick)return;const n=Date.now();if(!force&&n-lastPush<30000)return;lastPush=n;try{await net("PUT","top/"+S.pid,{n:S.nick,v:Math.round(wealth()),b:S.st.best,t:n})}catch(e){}}
 async function lbLoad(){if(!DB)return;if(!lbRows.length)$("lb").innerHTML='<li class="skel"></li><li class="skel"></li><li class="skel"></li>';try{const d=await net("GET","top",null,`?orderBy=%22${lbMode}%22&limitToLast=20`);lbRows=Object.entries(d||{}).map(([id,x])=>({id,n:esc(x.n),v:+x.v||0,b:+x.b||0})).sort((a,b)=>b[lbMode]-a[lbMode]);lbRender()}catch(e){$("lb").innerHTML="<li>Не удалось загрузить рейтинг. Проверь ссылку на базу.</li>"}}
 function lbRender(){$("lb").innerHTML=(S.nick?"":"<li>Задай ник выше, чтобы попасть в рейтинг.</li>")+(lbRows.length?lbRows.map((r,j)=>`<li style="${r.id===S.pid?"color:var(--gold);font-weight:700":""}">${j+1}. ${r.n} — ${fmt(r[lbMode])} ◈</li>`).join(""):"<li>Пока никого. Стань первым.</li>")}
-$("lbm").style.display=DB?"":"none";$("nk").value=S.nick||"";
+$("lbm").style.display=DB?"":"none";
 $("lbm").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;lbMode=b.dataset.m;document.querySelectorAll("#lbm .chip").forEach(x=>x.classList.toggle("on",x===b));lbLoad()};
-$("nkb").onclick=()=>{const n=$("nk").value.trim().replace(/[<>&"'\/\\]/g,"").slice(0,16);if(n.length<2){toast("Ник от 2 до 16 символов");return}S.nick=n;save();toast("Ник сохранён: "+n);lbPush(true).then(lbLoad)};
+
 setInterval(()=>{if(DB&&$("t-pr").classList.contains("on"))lbLoad()},30000);
 
 let rk=1,rm=S.rm||null,rpoll=null,rshow=false,rbusy=false;
@@ -791,13 +857,62 @@ $("wl").onclick=()=>{const a=wAmt();if(a<1){toast("Кошелёк ещё пус�
 $("wup").onclick=()=>{const wl=S.wl||0;if(wl>=10){toast("Кошелёк уже максимального уровня");return}const cost=300*(wl+1)*(wl+1);if(S.bal<cost){toast("Нужно "+fmt(cost)+" ◈ для улучшения");return}S.wl=wl+1;S.bal-=cost;S.wt=Date.now()-0;sfx.level();toast("Уровень кошелька "+(wl+1)+"!");all()};
 setInterval(wUpd,1000);
 {const a=wAmt();if(a>=60)setTimeout(()=>toast("Кошелёк: накопилось "+fmt(a)+" ◈"),1200)}
-if(typeof addEventListener==="function")addEventListener("storage",e=>{if(e.key==="emberUp4"&&e.newValue&&!busy&&!cb&&!bb&&!cr.on&&!mn.on&&!rm){try{S=sanitize(JSON.parse(e.newValue));all()}catch(x){}}});
+
 S.rf=S.rf||{};{const t=(S.rf.mn||0)+(S.rf.cr||0);S.rf={};if(t>0){S.bal+=t;setTimeout(()=>toast("Незавершённая игра: ставка "+fmt(t)+" ◈ возвращена"),700)}}
 /* сохраняем прокрутку списков при перерисовке */
 const keepScroll=(f,id)=>function(){const e=$(id),x=e.scrollLeft,y=e.scrollTop;f();e.scrollLeft=x;e.scrollTop=y};
 rInvUp=keepScroll(rInvUp,"inv-up");rTg=keepScroll(rTg,"tg");rInv=keepScroll(rInv,"inv");rCt=keepScroll(rCt,"ctg");
 $("rc").onclick=e=>{const b=e.target.closest("[data-c]");if(!b||busy)return;const v=+b.dataset.c;coins=v?Math.min(S.bal,coins+v):0;fixTgt();rStage();rTg()};
-all();
+// ===== АККАУНТЫ =====
+const AK="emberAcc2",enc=new TextEncoder();let amode="in",fails=0,lockUntil=0;
+const accs=()=>{try{return JSON.parse(localStorage.getItem(AK))||{}}catch(e){return{}}};
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+async function hp(pw,salt){const k=await crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveBits"]);return hex(await crypto.subtle.deriveBits({name:"PBKDF2",salt:enc.encode(salt),iterations:120000,hash:"SHA-256"},k,256))}
+const TAB=sessionStorage.getItem("emberTab")||(sessionStorage.setItem("emberTab",uid()),sessionStorage.getItem("emberTab"));
+const lockOk=l=>{const v=localStorage.getItem("emberLock:"+l);if(!v)return true;const p=v.split(":");return p[0]===TAB||Date.now()-(+p[1])>5000};
+function loadFor(l){const r=localStorage.getItem(LKEY(l));if(!r)return null;const i=r.lastIndexOf("|"),j=r.slice(0,i);if(h53(j+SECRET+l)!==r.slice(i+1))return"bad";try{return sanitize(JSON.parse(j))}catch(e){return"bad"}}
+function bounce(msg){if(ACC){save();try{localStorage.removeItem("emberLock:"+ACC)}catch(e){}}ACC=null;sessionStorage.removeItem("emberSess");if(msg)sessionStorage.setItem("emberMsg",msg);location.reload()}
+function enter(l,st){
+  ACC=l;S=st;S.nick=l;S.pid=S.pid||uid()+uid();
+  const t=((S.rf&&S.rf.mn)||0)+((S.rf&&S.rf.cr)||0);S.rf={};if(t>0)setTimeout(()=>toast("Незавершённая игра: ставка "+fmt(t)+" ◈ потеряна"),700);
+  if(!DB&&S.pend){S.bal+=S.pend.cost;S.pend=null;S.rm=null}rm=null;
+  sessionStorage.setItem("emberSess",l);localStorage.setItem("emberLock:"+l,TAB+":"+Date.now());
+  $("auth").style.display="none";$("acn").textContent=l;all();
+}
+document.querySelectorAll("#auth [data-m]").forEach(b=>b.onclick=()=>{amode=b.dataset.m;document.querySelectorAll("#auth [data-m]").forEach(x=>x.classList.toggle("on",x===b));$("ap2w").classList.toggle("hid",amode==="in");$("ago").textContent=amode==="in"?"ВОЙТИ":"СОЗДАТЬ АККАУНТ";$("aerr").textContent=""});
+$("ago").onclick=async()=>{
+  const err=m=>{$("aerr").textContent=m},l=$("al").value.trim().toLowerCase(),pw=$("ap").value;
+  if(Date.now()<lockUntil){err("Слишком много попыток. Подожди "+Math.ceil((lockUntil-Date.now())/1e3)+" с");return}
+  if(!/^[a-z0-9_]{3,16}$/.test(l)){err("Логин: 3–16 символов, латиница, цифры и _");return}
+  if(pw.length<6){err("Пароль не короче 6 символов");return}
+  if(amode==="up"&&pw!==$("ap2").value){err("Пароли не совпадают");return}
+  if(!(window.crypto&&crypto.subtle)){err("Нужен https или современный браузер");return}
+  $("ago").disabled=true;err("");
+  try{
+    const A=accs();let rec=A[l];
+    if(DB){try{const r=await net("GET","users/"+l);if(r&&r.h)rec=r}catch(e){err("Нет связи с базой. Попробуй позже");return}}
+    if(amode==="up"){
+      if(rec){err("Такой логин уже занят");return}
+      const s=uid()+uid(),h=await hp(pw,s);
+      if(DB){try{await net("PUT","users/"+l,{s,h,t:Date.now()})}catch(e){err("Логин занят или нет связи");return}}
+      const first=!Object.keys(A).length;A[l]={s,h};localStorage.setItem(AK,JSON.stringify(A));
+      enter(l,first?(LEG&&Array.isArray(LEG.inv)?sanitize(LEG):S):fresh());
+    }else{
+      if(!rec||(await hp(pw,rec.s))!==rec.h){fails++;if(fails>=5){lockUntil=Date.now()+15000;fails=0}err("Неверный логин или пароль");return}
+      if(!lockOk(l)){err("Аккаунт открыт в другой вкладке");return}
+      fails=0;if(!A[l]){A[l]={s:rec.s,h:rec.h};localStorage.setItem(AK,JSON.stringify(A))}
+      let st=loadFor(l);if(st==="bad"){setTimeout(()=>toast("Сохранение повреждено, прогресс сброшен"),600);st=null}
+      enter(l,st||fresh());
+    }
+  }finally{$("ago").disabled=false}
+};
+$("lo").onclick=()=>bounce();
+setInterval(()=>{if(!ACC)return;if(!lockOk(ACC)){bounce("Аккаунт открыт в другой вкладке");return}localStorage.setItem("emberLock:"+ACC,TAB+":"+Date.now())},2000);
+{const m=sessionStorage.getItem("emberMsg");sessionStorage.removeItem("emberMsg");const l=sessionStorage.getItem("emberSess");
+ if(l&&accs()[l]&&lockOk(l)){let st=loadFor(l);if(st==="bad")st=null;enter(l,st||fresh())}else if(m)$("aerr").textContent=m}
+
+rQty();all();
+})();
 </script>
 </body>
 </html>
