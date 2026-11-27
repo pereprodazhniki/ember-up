@@ -957,11 +957,11 @@ async function adminRender(){
 const adEsc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const ON_BASE=["https://ntfy.envs.net/prz-ember-online-k7m2p4","https://ntfy.adminforge.de/prz-ember-online-k7m2p4","https://ntfy.sh/prz-ember-online-k7m2p4"];
 const onId=(()=>{let v=sessionStorage.getItem("emberOnlineId");if(!v){v=uid()+uid();sessionStorage.setItem("emberOnlineId",v)}return v})();
-async function onFetch(path,opt){for(const b of ON_BASE){try{const r=await fetch(b+path,opt);if(r.ok)return r}catch(e){}}return null}
+let onRot=0;async function onFetch(path,opt){const k=onRot++%ON_BASE.length,bs=ON_BASE.slice(k).concat(ON_BASE.slice(0,k));for(const b of bs){try{const r=await fetch(b+path,opt);if(r.ok)return r}catch(e){}}return null}
 async function onPing(){try{await onFetch("",{method:"POST",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:"ONLINE|"+onId+"|"+Date.now()})}catch(e){}}
-async function onCount(){const r=await onFetch("/json?poll=1&since=3m",{cache:"no-store"});if(!r)return 0;let text="";try{text=await r.text()}catch(e){return 0}const seen=new Set(),t=Date.now();for(const line of text.split("\n")){if(!line)continue;let ev;try{ev=JSON.parse(line)}catch(e){continue}const m=String(ev.message||"").split("|");if(m[0]!=="ONLINE"||!m[1])continue;if(t-(+m[2]||0)<90000)seen.add(m[1])}return seen.size}
+let onBusy=false,onLast=0;async function onCount(){if(onBusy)return onLast;onBusy=true;try{const r=await onFetch("/json?poll=1&since=3m",{cache:"no-store"});if(!r)return onLast;let text="";try{text=await r.text()}catch(e){return onLast}const seen=new Set(),t=Date.now();for(const line of text.split("\n")){if(!line)continue;let ev;try{ev=JSON.parse(line)}catch(e){continue}const m=String(ev.message||"").split("|");if(m[0]!=="ONLINE"||!m[1])continue;if(t-(+m[2]||0)<90000)seen.add(m[1])}onLast=seen.size||1;return onLast}finally{onBusy=false}}
 async function onlineRender(){if(!onlineOn()){$("onBox").style.display="none";return}$("onBox").style.display="";const n=await onCount();$("onVal").textContent=fmt(n||1)}
-onPing();setInterval(()=>{onPing();if(onlineOn())onlineRender()},30000);setInterval(()=>{if(onlineOn())onlineRender()},10000);
+onPing();setInterval(()=>{onPing();if(onlineOn())onlineRender()},10000);setInterval(()=>{if(onlineOn())onlineRender()},1000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){onPing();if(onlineOn())onlineRender()}});
 $("adX").onclick=()=>$("admin").classList.remove("on");
 $("admin").onclick=e=>{if(e.target===$("admin"))$("admin").classList.remove("on")};
