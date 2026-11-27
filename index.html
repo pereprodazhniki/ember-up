@@ -874,6 +874,7 @@ $("rc").onclick=e=>{const b=e.target.closest("[data-c]");if(!b||busy)return;cons
 // ===== ЛОГИН: жёсткий фильтр мата и оскорблений =====
 const BW_CK={а:"a",в:"b",е:"e",к:"k",м:"m",н:"h",о:"o",р:"p",с:"c",т:"t",у:"y",х:"x"},ckey=s=>s.toLowerCase().replace(/ё/g,"е").replace(/[а-я]/g,c=>BW_CK[c]||c);
 const BW_LEET={0:"о",1:"и",2:"з",3:"з",4:"ч",5:"с",6:"б",7:"т",8:"в",9:"г","@":"а","$":"с","!":"и"};
+const BW_LEET2={0:"о",1:"л",2:"з",3:"е",4:"а",5:"с",6:"б",7:"т",8:"в",9:"г"};const BW_LOOK={a:"а",b:"в",c:"с",e:"е",h:"н",i:"и",k:"к",m:"м",n:"н",o:"о",p:"р",s:"с",t:"т",x:"х",y:"у"};
 const BW_KL={й:"q",ц:"w",у:"e",к:"r",е:"t",н:"y",г:"u",ш:"i",щ:"o",з:"p",х:"[",ъ:"]",ф:"a",ы:"s",в:"d",а:"f",п:"g",р:"h",о:"j",л:"k",д:"l",ж:";",э:"'",я:"z",ч:"x",с:"c",м:"v",и:"b",т:"n",ь:"m"};
 const BW_LK={};for(const k in BW_KL)BW_LK[BW_KL[k]]=k;
 const BW_TR={а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya"};
@@ -883,10 +884,10 @@ const BW_SUB=("хуй хуе хуя хую хуи хуев пизд ебан е�
 const BW_EQ=("еб бля сук жоп лох дур туп пид муд асс ass sex anal rape cock dumb").split(/\s+/).filter(Boolean);
 function badName(n){
   const raw=String(n||"").toLowerCase().replace(/ё/g,"е");
-  const leet=raw.replace(/[0-9@$!]/g,c=>BW_LEET[c]||c);
+  const leet=raw.replace(/[0-9@$!]/g,c=>BW_LEET[c]||c),leet2=raw.replace(/[0-9@$!]/g,c=>BW_LEET2[c]||c);
   const clean=s=>s.replace(/[^a-zа-я]/g,""),sq=s=>s.replace(/(.)\1+/g,"$1"),vs=new Set(),add=s=>{if(s)vs.add(sq(s))};
-  const base=clean(leet),kl=base.replace(/[а-я]/g,c=>BW_KL[c]||c),lk=base.replace(/[a-z]/g,c=>BW_LK[c]||c);
-  add(base);add(kl);add(lk);add(bwRep(base,BW_TR));add(bwRep(base,BW_RT));add(bwRep(kl,BW_RT));add(bwRep(lk,BW_TR));add(bwRep(kl,BW_TR));add(bwRep(lk,BW_RT));
+  const base=clean(leet),base2=clean(leet2),kl=base.replace(/[а-я]/g,c=>BW_KL[c]||c),lk=base.replace(/[a-z]/g,c=>BW_LK[c]||c),look=s=>s.replace(/[a-z]/g,c=>BW_LOOK[c]||c);
+  add(base);add(base2);add(look(base));add(look(base2));add(kl);add(lk);add(bwRep(base,BW_TR));add(bwRep(base,BW_RT));add(bwRep(kl,BW_RT));add(bwRep(lk,BW_TR));add(bwRep(kl,BW_TR));add(bwRep(lk,BW_RT));
   for(const v of vs){
     for(const w of BW_SUB)if(w.length>=(/[а-я]/.test(w)?3:4)&&v.includes(w))return true;
     for(const w of BW_EQ)if(v===w)return true;
