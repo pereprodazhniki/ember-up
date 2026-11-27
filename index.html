@@ -404,7 +404,7 @@ section.on{animation:fadeUp .35s both}
 
 <div id="auth"><div class="acard"><div class="alogo">EMBER UP</div><p class="asub">Апгрейдер и кейсы · войди, чтобы играть</p>
 <div class="atabs"><button class="chip on" data-m="in">Вход</button><button class="chip" data-m="up">Регистрация</button></div>
-<label>Логин<input id="al" class="inp" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="буквы, цифры, _ (можно по-русски)"></label>
+<label>Логин<input id="al" class="inp" maxlength="16" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="имя: буквы, цифры, _ (без мата и оскорблений)"></label>
 <label>Пароль<input id="ap" class="inp" type="password" autocomplete="current-password" placeholder="не короче 6 символов"></label>
 <label id="ap2w" class="hid">Повтори пароль<input id="ap2" class="inp" type="password" autocomplete="new-password"></label>
 <div id="aerr" class="aerr"></div><button class="go" id="ago">ВОЙТИ</button>
@@ -871,20 +871,28 @@ S.rf=S.rf||{};{const t=(S.rf.mn||0)+(S.rf.cr||0);S.rf={};if(t>0){S.bal+=t;setTim
 const keepScroll=(f,id)=>function(){const e=$(id),x=e.scrollLeft,y=e.scrollTop;f();e.scrollLeft=x;e.scrollTop=y};
 rInvUp=keepScroll(rInvUp,"inv-up");rTg=keepScroll(rTg,"tg");rInv=keepScroll(rInv,"inv");rCt=keepScroll(rCt,"ctg");
 $("rc").onclick=e=>{const b=e.target.closest("[data-c]");if(!b||busy)return;const v=+b.dataset.c;coins=v?Math.min(S.bal,coins+v):0;fixTgt();rStage();rTg()};
-// ===== ЛОГИН: русские буквы, фильтр запрещённых слов, защита от двойников =====
+// ===== ЛОГИН: жёсткий фильтр мата и оскорблений =====
 const BW_CK={а:"a",в:"b",е:"e",к:"k",м:"m",н:"h",о:"o",р:"p",с:"c",т:"t",у:"y",х:"x"},ckey=s=>s.toLowerCase().replace(/ё/g,"е").replace(/[а-я]/g,c=>BW_CK[c]||c);
-const BW_NC={a:"а",b:"в",c:"с",e:"е",h:"н",k:"к",m:"м",o:"о",p:"р",t:"т",x:"х",y:"у",0:"о",3:"з",4:"ч"},BW_NL={а:"a",в:"b",е:"e",к:"k",м:"m",н:"h",о:"o",р:"p",с:"c",т:"t",у:"y",х:"x",0:"o",1:"i",3:"e",4:"a",5:"s",7:"t"};
-const bwC=s=>s.replace(/(.)\1+/g,"$1");
-const BW_SUB=["хуй","хуе","хуя","хую","хуи","пизд","ебан","ебат","ебал","ебуч","ебла","ебну","ебис","блят","бляд","сука","суки","сучк","сучар","мудак","мудил","мудо","пидор","пидар","пидр","педик","гандон","гондон","залуп","шлюх","шалав","долбоеб","долбаеб","говн","жоп","срак","дроч","мраз","ублюд","гнид","выеб","заеб","наеб","уеб","нахер","похер","захер","нигер","нигг","чурк","сосат","отсос","дебил","идиот","кретин","гитлер","фашист","нацист",
-"fuck","fck","shit","bitch","cunt","dick","pussy","whore","slut","nigg","fagg","retard","asshole","bastard","wank","twat","porn","hitler","rapist","huy","hui","huj","huev","hueb","pizd","ebat","ebal","eban","eblan","ebuch","blya","blyat","blyad","suka","sucka","mudak","mudil","pidor","pidar","pidr","gandon","gondon","zalup","shlyux","shlyuh","dolboeb","dolbaeb","gavno","govno","zhopa","jopa","drochi","ublyud","gnid","naeb","zaeb","vyeb","nahuy","pohuy","pohui","nahui","nahuj","naher","poher","debil","idiot"].map(bwC);
-const BW_EQ=["бля","жид","хач","чмо","nazi","kike","spic","chink","anal","rape","cock","sex","ass","лох"].map(bwC);
+const BW_LEET={0:"о",1:"и",2:"з",3:"з",4:"ч",5:"с",6:"б",7:"т",8:"в",9:"г","@":"а","$":"с","!":"и"};
+const BW_KL={й:"q",ц:"w",у:"e",к:"r",е:"t",н:"y",г:"u",ш:"i",щ:"o",з:"p",х:"[",ъ:"]",ф:"a",ы:"s",в:"d",а:"f",п:"g",р:"h",о:"j",л:"k",д:"l",ж:";",э:"'",я:"z",ч:"x",с:"c",м:"v",и:"b",т:"n",ь:"m"};
+const BW_LK={};for(const k in BW_KL)BW_LK[BW_KL[k]]=k;
+const BW_TR={а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya"};
+const BW_RT={};for(const k in BW_TR)if(k)BW_RT[BW_TR[k]]=k;
+const bwRep=(s,m)=>{let r=s;Object.keys(m).sort((a,b)=>b.length-a.length).forEach(k=>{r=r.split(k).join(m[k])});return r};
+const BW_SUB=("хуй хуе хуя хую хуи хуев пизд ебан ебат ебал ебач ебуч ебла ебну ебис бляд блят бляш сука суки сучк сучар мудак мудил мудо пидор пидар пидр педик ганд гонд залуп шлюх шалав долбо долба говн гавн жопа срак срака дроч мраз ублюд гнид выеб заеб наеб уеб поеб доеб проеб нахуй нахер похуй похер захер тупо тупа тупы тупиц тупоголов дура дуро дуры дурак идиот дебил кретин придур недоум даун осел ослик баран свинь коров куриц обезьян попуга урод уродин страшил безмозгл бездар маразм склероз олигофрен шизофрен шиз псих психа клоун шутих неудачник лузер лохотрон нищеброд голодран оборван ботаник зануда нытик труслив предател подлец мерзавец негодяй сволоч жирдяй толстяк пухляш наци нацист фашист гитлер негр ниггер нигг жидов хач чурк скинхед порн порно секс орал анал мастурб онани зоофил педофил изнасил насил маньяк убийц удав повес нарко кокаин героин метамфет fuck fck shit bitch cunt dick pussy whore slut nigg fagg retard asshole bastard wank twat porn hitler rapist nazi kike spic chink rape cock stupid dumbass moron loser ugly motherfucker bullshit bollocks bugger wanker").split(/\s+/).filter(Boolean);
+const BW_EQ=("еб бля сук жоп лох дур туп пид муд асс ass sex anal rape cock dumb").split(/\s+/).filter(Boolean);
 function badName(n){
-  const base=n.toLowerCase().replace(/ё/g,"е").replace(/_/g,""),vs=new Set();
-  for(const s of [base,base.replace(/[a-z0-9]/g,c=>BW_NC[c]||c),base.replace(/[а-я0-9]/g,c=>BW_NL[c]||c)]){vs.add(bwC(s));vs.add(bwC(s.replace(/[0-9]/g,"")))}
-  for(const v of vs)if(BW_SUB.some(w=>v.includes(w)))return true;
-  for(const t of n.toLowerCase().replace(/ё/g,"е").split(/[_0-9]+/).filter(Boolean)){
-    for(const s of [t,t.replace(/[a-z]/g,c=>BW_NC[c]||c),t.replace(/[а-я]/g,c=>BW_NL[c]||c)])if(BW_EQ.includes(bwC(s)))return true}
-  return false}
+  const raw=String(n||"").toLowerCase().replace(/ё/g,"е");
+  const leet=raw.replace(/[0-9@$!]/g,c=>BW_LEET[c]||c);
+  const clean=s=>s.replace(/[^a-zа-я]/g,""),sq=s=>s.replace(/(.)\1+/g,"$1"),vs=new Set(),add=s=>{if(s)vs.add(sq(s))};
+  const base=clean(leet),kl=base.replace(/[а-я]/g,c=>BW_KL[c]||c),lk=base.replace(/[a-z]/g,c=>BW_LK[c]||c);
+  add(base);add(kl);add(lk);add(bwRep(base,BW_TR));add(bwRep(base,BW_RT));add(bwRep(kl,BW_RT));add(bwRep(lk,BW_TR));add(bwRep(kl,BW_TR));add(bwRep(lk,BW_RT));
+  for(const v of vs){
+    for(const w of BW_SUB)if(w.length>=(/[а-я]/.test(w)?3:4)&&v.includes(w))return true;
+    for(const w of BW_EQ)if(v===w)return true;
+  }
+  return false;
+}
 // ===== АККАУНТЫ =====
 const AK="emberAcc2",enc=new TextEncoder();let amode="in",fails=0,lockUntil=0;
 const accs=()=>{try{return JSON.parse(localStorage.getItem(AK))||{}}catch(e){return{}}};
@@ -907,7 +915,7 @@ $("ago").onclick=async()=>{
   if(Date.now()<lockUntil){err("Слишком много попыток. Подожди "+Math.ceil((lockUntil-Date.now())/1e3)+" с");return}
   if(!/^[a-zа-я0-9_]{3,16}$/.test(nm)){err("Логин: 3–16 символов — русские или латинские буквы, цифры и _");return}
   if(!/[a-zа-я]/.test(nm)){err("В логине нужна хотя бы одна буква");return}
-  if(amode==="up"&&badName(nm)){err("Этот логин нельзя: в нём запрещённые слова");return}
+  if(amode==="up"&&badName(nm)){err("Этот логин нельзя: мат, оскорбления и обход написания запрещены");return}
   if(pw.length<6){err("Пароль не короче 6 символов");return}
   if(amode==="up"&&pw!==$("ap2").value){err("Пароли не совпадают");return}
   if(!(window.crypto&&crypto.subtle)){err("Нужен https или современный браузер");return}
@@ -923,7 +931,7 @@ $("ago").onclick=async()=>{
       enter(l,nm,first?(LEG&&Array.isArray(LEG.inv)?sanitize(LEG):S):fresh());
     }else{
       if(!rec||(await hp(pw,rec.s))!==rec.h){fails++;if(fails>=5){lockUntil=Date.now()+15000;fails=0}err("Неверный логин или пароль");return}
-      if(badName(rec.n||nm)){err("Этот логин запрещён");return}
+      if(badName(rec.n||nm)){err("Этот логин запрещён: мат или оскорбление");return}
       if(!lockOk(l)){err("Аккаунт открыт в другой вкладке");return}
       fails=0;if(!A[l]){A[l]={s:rec.s,h:rec.h,n:rec.n||nm};localStorage.setItem(AK,JSON.stringify(A))}
       let st=loadFor(l);if(st==="bad"){setTimeout(()=>toast("Сохранение повреждено, прогресс сброшен"),600);st=null}
