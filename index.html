@@ -703,7 +703,7 @@ $("mg").onclick=e=>{
 $("mcash").onclick=()=>{if(mn.on&&mn.open.size)mCash()};
 
 const PROMO={"1f8wzxvw47b":500,"24l08b7fsbw":777,"cqq0yzl6j1":300,"t3j41memyd":1500};
-$("pb").onclick=async()=>{const c=$("pc").value.trim().toUpperCase(),k=h53(c);if(k==="09af8904677dbdd2"){adminToggle();$("pc").value="";return}if(k==="899a697bb15e4af0"){onlineToggle();$("pc").value="";return}S.promo=S.promo||{};if(!PROMO[k]){toast("Такого кода нет");return}if(S.promo[c]){toast("Код уже использован");return}S.promo[c]=1;S.bal+=PROMO[k];coinBurst($("pb"),PROMO[k]);$("pc").value="";toast("Промокод: +"+PROMO[k]+" ◈");all()};
+$("pb").onclick=async()=>{const c=$("pc").value.trim().toUpperCase(),k=h53(c);if(k==="2eg3w8eg2j6"){adminToggle();$("pc").value="";return}if(k==="59ootds6jx"){onlineToggle();$("pc").value="";return}S.promo=S.promo||{};if(!PROMO[k]){toast("Такого кода нет");return}if(S.promo[c]){toast("Код уже использован");return}S.promo[c]=1;S.bal+=PROMO[k];coinBurst($("pb"),PROMO[k]);$("pc").value="";toast("Промокод: +"+PROMO[k]+" ◈");all()};
 
 const QUESTS=[["Сделай 3 апгрейда","up",3,100],["Выиграй 2 апгрейда","w",2,150],["Открой 2 кейса","cs",2,100],["Сыграй в Мины 2 раза","mn",2,100]];
 function qInit(){const d=Math.floor(Date.now()/864e5);if(!S.q||S.q.d!==d)S.q={d,p:{up:0,w:0,cs:0,mn:0},done:{}}}
