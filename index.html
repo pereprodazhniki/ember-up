@@ -269,7 +269,10 @@ section.on{animation:fadeUp .35s both}
 .aerr{min-height:20px;color:#ff6a7a;font-weight:700;font-size:13px;margin-bottom:8px;text-align:center}
 .acard .go{width:100%;padding:16px;border-radius:18px}.acard small{display:block;margin-top:12px;color:var(--mute);text-align:center;font-size:12px}
 .case,.stat,.ach div,.rrow,.drop{border-radius:24px}.view{border-radius:24px}.inp{border-radius:16px}.toast{box-shadow:0 12px 30px #000a}
-</style>
+.mcard label{display:block;font-weight:700;font-size:13px;color:var(--mute);margin-bottom:12px}
+.mcard .inp{display:block;width:100%;margin-top:6px;padding:14px 16px;border-radius:16px;font-size:16px}
+.mcard .go{width:100%;padding:16px;border-radius:18px}
+.mcard h2{margin-top:0}</style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="alternate icon" type="image/png" href="apple-touch-icon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -386,7 +389,7 @@ section.on{animation:fadeUp .35s both}
   <p class="sub">Бонус раз в сутки, статистика и последние события. Промокоды ищи сам: один из них спрятан лучше остальных.</p>
   <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><button class="chip" id="wup"></button></div>
   <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><input class="inp" id="pc" placeholder="Промокод" maxlength="16"><button class="chip" id="pb">Активировать</button></div>
-  <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><span class="pill">Аккаунт: <b id="acn">—</b></span><button class="chip" id="lo">Выйти из аккаунта</button></div>
+  <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><span class="pill">Аккаунт: <b id="acn">—</b></span><button class="chip" id="lo">Выйти из аккаунта</button><button class="chip" id="pwOpen">Сменить пароль</button></div>
   <div class="ctl" style="justify-content:flex-start;margin-bottom:14px"><button class="go" id="bon" style="font-size:13px;padding:13px 28px"></button><button class="chip" id="rst">Сбросить прогресс</button></div>
   <div class="stats" id="stats"></div>
   <h2>Задания дня</h2><div class="ach" id="qs"></div>
@@ -923,7 +926,33 @@ $("ago").onclick=async()=>{
     }
   }finally{$("ago").disabled=false}
 };
-$("lo").onclick=()=>bounce();
+// ===== СМЕНА ПАРОЛЯ =====
+const pwBox=$("pw"),pwOpenBtn=$("pwOpen"),pwSetErr=m=>{$("pwerr").textContent=m||""};
+const pwClose=()=>{pwBox.classList.remove("on");document.body.classList.remove("lock")};
+pwOpenBtn.onclick=()=>{if(!ACC)return;pwSetErr("");$("pw0").value=$("pw1").value=$("pw2").value="";pwBox.classList.add("on");document.body.classList.add("lock");setTimeout(()=>$("pw0").focus(),0)};
+$("pwX").onclick=pwClose;
+pwBox.onclick=e=>{if(e.target===pwBox)pwClose()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&pwBox.classList.contains("on"))pwClose()});
+$("pwGo").onclick=async()=>{
+  if(!ACC)return;
+  const old=$("pw0").value,nw=$("pw1").value,rp=$("pw2").value;
+  if(!old){pwSetErr("Введи текущий пароль");return}
+  if(nw.length<6){pwSetErr("Новый пароль — не короче 6 символов");return}
+  if(nw!==rp){pwSetErr("Новые пароли не совпадают");return}
+  if(!(window.crypto&&crypto.subtle)){pwSetErr("Нужен https или современный браузер");return}
+  const A=accs(),l=ACC,rec=A[l];
+  if(!rec||!rec.s||!rec.h){pwSetErr("Аккаунт не найден — выйди и войди заново");return}
+  $("pwGo").disabled=true;pwSetErr("");
+  try{
+    if((await hp(old,rec.s))!==rec.h){pwSetErr("Текущий пароль неверный");return}
+    if((await hp(nw,rec.s))===rec.h){pwSetErr("Новый пароль совпадает с текущим");return}
+    const salt=uid()+uid(),hash=await hp(nw,salt);
+    if(DB){let dbRec={};try{dbRec=(await net("GET","users/"+encodeURIComponent(l)))||{}}catch(e){pwSetErr("Нет связи с базой");return}
+      try{await net("PUT","users/"+encodeURIComponent(l),Object.assign({},dbRec,{s:salt,h:hash,t:Date.now(),n:rec.n||l}))}catch(e){pwSetErr("Не удалось сохранить на сервере");return}}
+    A[l]=Object.assign({},rec,{s:salt,h:hash});localStorage.setItem(AK,JSON.stringify(A));
+    $("pw0").value=$("pw1").value=$("pw2").value="";pwClose();toast("Пароль изменён");save();
+  }finally{$("pwGo").disabled=false}
+};$("lo").onclick=()=>bounce();
 setInterval(()=>{if(!ACC)return;if(!lockOk(ACC)){bounce("Аккаунт открыт в другой вкладке");return}localStorage.setItem("emberLock:"+ACC,TAB+":"+Date.now())},2000);
 {const m=sessionStorage.getItem("emberMsg");sessionStorage.removeItem("emberMsg");const l=sessionStorage.getItem("emberSess");
  if(l&&accs()[l]&&lockOk(l)){let st=loadFor(l);if(st==="bad")st=null;enter(l,accs()[l].n||l,st||fresh())}else if(m)$("aerr").textContent=m}
@@ -931,5 +960,10 @@ setInterval(()=>{if(!ACC)return;if(!lockOk(ACC)){bounce("Аккаунт откр
 rQty();all();
 })();
 </script>
-</body>
+<div class="modal" id="pw"><div class="mcard"><button class="mx" id="pwX">✕</button><h2>Смена пароля</h2><p class="sub">Введи текущий пароль и новый — дважды.</p>
+<label>Текущий пароль<input id="pw0" class="inp" type="password" autocomplete="current-password" maxlength="64"></label>
+<label>Новый пароль<input id="pw1" class="inp" type="password" autocomplete="new-password" maxlength="64" placeholder="не короче 6 символов"></label>
+<label>Повтори новый<input id="pw2" class="inp" type="password" autocomplete="new-password" maxlength="64"></label>
+<div class="aerr" id="pwerr"></div><button class="go" id="pwGo">СМЕНИТЬ ПАРОЛЬ</button>
+<small>Прогресс и логин не изменятся. В другой вкладке нужно будет войти заново.</small></div></div></body>
 </html>
