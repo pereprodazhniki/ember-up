@@ -409,7 +409,12 @@ section.on{animation:fadeUp .35s both}
 <label id="ap2w" class="hid">Повтори пароль<input id="ap2" class="inp" type="password" autocomplete="new-password"></label>
 <div id="aerr" class="aerr"></div><button class="go" id="ago">ВОЙТИ</button>
 <small>Логин уникален. Пароль восстановить нельзя, запомни его.</small></div></div>
-<script>(()=>{
+<div class="modal" id="pw"><div class="mcard"><button class="mx" id="pwX">✕</button><h2>Смена пароля</h2><p class="sub">Введи текущий пароль и новый — дважды.</p>
+<label>Текущий пароль<input id="pw0" class="inp" type="password" autocomplete="current-password" maxlength="64"></label>
+<label>Новый пароль<input id="pw1" class="inp" type="password" autocomplete="new-password" maxlength="64" placeholder="не короче 6 символов"></label>
+<label>Повтори новый<input id="pw2" class="inp" type="password" autocomplete="new-password" maxlength="64"></label>
+<div class="aerr" id="pwerr"></div><button class="go" id="pwGo">СМЕНИТЬ ПАРОЛЬ</button>
+<small>Прогресс и логин не изменятся. В другой вкладке нужно будет войти заново.</small></div></div><script>(()=>{
 // ОНЛАЙН: вставь сюда ссылку на базу Firebase Realtime Database, например "https://имя-проекта-default-rtdb.europe-west1.firebasedatabase.app"
 // Пока пусто, сайт работает без общего рейтинга и без комнат с друзьями.
 const DB="";
@@ -960,10 +965,5 @@ setInterval(()=>{if(!ACC)return;if(!lockOk(ACC)){bounce("Аккаунт откр
 rQty();all();
 })();
 </script>
-<div class="modal" id="pw"><div class="mcard"><button class="mx" id="pwX">✕</button><h2>Смена пароля</h2><p class="sub">Введи текущий пароль и новый — дважды.</p>
-<label>Текущий пароль<input id="pw0" class="inp" type="password" autocomplete="current-password" maxlength="64"></label>
-<label>Новый пароль<input id="pw1" class="inp" type="password" autocomplete="new-password" maxlength="64" placeholder="не короче 6 символов"></label>
-<label>Повтори новый<input id="pw2" class="inp" type="password" autocomplete="new-password" maxlength="64"></label>
-<div class="aerr" id="pwerr"></div><button class="go" id="pwGo">СМЕНИТЬ ПАРОЛЬ</button>
-<small>Прогресс и логин не изменятся. В другой вкладке нужно будет войти заново.</small></div></div></body>
+</body>
 </html>
